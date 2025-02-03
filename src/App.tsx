@@ -10,7 +10,7 @@ const App = () => {
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [year, setYear] = useState(new Date().getFullYear())
 
-  const [showModal, setShowModal] = useState(true)
+  const [showModal, setShowModal] = useState(false)
 
   const handleMouseOver = () => {
     setShowModal(true)
@@ -21,7 +21,6 @@ const App = () => {
   }
 
   const handlePlusMonth = () => {
-    console.log(month)
     if (month === 12) {
       console.log("last month")
       setYear(year + 1)
@@ -32,7 +31,6 @@ const App = () => {
   }
 
   const handleMinesMonth = () => {
-    console.log(month)
     if (month === 1) {
       console.log("first month")
       setYear(year - 1)

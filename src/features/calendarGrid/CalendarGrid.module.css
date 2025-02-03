@@ -25,6 +25,13 @@
   background-color: #f9f9f9;
 }
 
+.cellHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+}
+
 .calendarDay {
   font-weight: bold;
   margin-bottom: 4px;
@@ -44,7 +51,7 @@
   background-color: #0056b3;
 }
 
-.taskList {
+/* .taskList {
   margin-top: 8px;
   padding-left: 0;
   list-style-type: none;
@@ -53,4 +60,4 @@
 .taskItem {
   font-size: 14px;
   color: #333;
-}
+} */
