@@ -4,6 +4,7 @@ import ChooseDateModal from "./features/chooseDateModal/ChooseDateModal"
 import NamesOfDays from "./features/namesOfDays/NamesOfDays"
 import CalendarGrid from "./features/calendarGrid/CalendarGrid"
 import { showMonthLong } from "./utils/utils"
+import MonthsButtons from "./features/monthsButtons/MonthsButtons"
 
 const App = () => {
   const [month, setMonth] = useState(new Date().getMonth() + 1)
@@ -17,6 +18,28 @@ const App = () => {
 
   const handleMouseOut = () => {
     setShowModal(false)
+  }
+
+  const handlePlusMonth = () => {
+    console.log(month)
+    if (month === 12) {
+      console.log("last month")
+      setYear(year + 1)
+      setMonth(1)
+    } else {
+      setMonth(month + 1)
+    }
+  }
+
+  const handleMinesMonth = () => {
+    console.log(month)
+    if (month === 1) {
+      console.log("first month")
+      setYear(year - 1)
+      setMonth(12)
+    } else {
+      setMonth(month - 1)
+    }
   }
 
   return (
@@ -38,8 +61,18 @@ const App = () => {
         </div>
       )}
       <section>
-        <div className="calendarTitle">
-          {showMonthLong(year, month - 1)} {year}
+        <div className="container">
+          <MonthsButtons
+            handlePlusMonth={handlePlusMonth}
+            handleMinesMonth={handleMinesMonth}
+          />
+          <div className="calendarTitle">
+            {showMonthLong(year, month - 1)} {year}
+          </div>
+          <MonthsButtons
+            handlePlusMonth={handlePlusMonth}
+            handleMinesMonth={handleMinesMonth}
+          />
         </div>
         <NamesOfDays />
         <CalendarGrid year={year} month={month} />

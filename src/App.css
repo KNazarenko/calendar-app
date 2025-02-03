@@ -21,3 +21,12 @@ section {
   font-weight: bold;
   padding: 20px;
 }
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: auto;
+  height: auto;
+  padding: 20px 0;
+}
