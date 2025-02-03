@@ -1,0 +1,56 @@
+.calendarContainer {
+  padding: 0 15px;
+  font-family: Arial, sans-serif;
+}
+
+.calendarControls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendarCell {
+  border: 1px solid #ddd;
+  padding: 8px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9;
+}
+
+.calendarDay {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.addTaskButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  margin-top: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.addTaskButton:hover {
+  background-color: #0056b3;
+}
+
+.taskList {
+  margin-top: 8px;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.taskItem {
+  font-size: 14px;
+  color: #333;
+}

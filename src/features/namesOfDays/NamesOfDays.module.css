@@ -1,0 +1,20 @@
+.namesContainer {
+  padding: 0 15px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.namesGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.nameCell {
+  padding: 8px;
+  min-height: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(92 94 96);
+}
