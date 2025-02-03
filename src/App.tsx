@@ -3,6 +3,7 @@ import "./App.css"
 import ChooseDateModal from "./features/chooseDateModal/ChooseDateModal"
 import NamesOfDays from "./features/namesOfDays/NamesOfDays"
 import CalendarGrid from "./features/calendarGrid/CalendarGrid"
+import { showMonthLong } from "./utils/utils"
 
 const App = () => {
   const [month, setMonth] = useState(new Date().getMonth() + 1)
@@ -38,7 +39,7 @@ const App = () => {
       )}
       <section>
         <div className="calendarTitle">
-          {new Date().toLocaleString("en", { month: "long" })} {year}
+          {showMonthLong(year, month - 1)} {year}
         </div>
         <NamesOfDays />
         <CalendarGrid year={year} month={month} />
