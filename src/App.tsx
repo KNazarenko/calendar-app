@@ -27,12 +27,14 @@ const App = () => {
         </div>
       </header>
       {showModal && (
-        <ChooseDateModal
-          year={year}
-          month={month}
-          setMonth={setMonth}
-          setYear={setYear}
-        />
+        <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+          <ChooseDateModal
+            year={year}
+            month={month}
+            setMonth={setMonth}
+            setYear={setYear}
+          />
+        </div>
       )}
       <section>
         <div className="calendarTitle">
