@@ -1,7 +1,7 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit"
 import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
-import { publicHolidayApiSlice } from "../features/countries/publicHolidayApiSlice"
+import { publicHolidayApiSlice } from "../features/calendarGrid/publicHolidayApiSlice"
 
 const rootReducer = combineSlices(publicHolidayApiSlice)
 export type RootState = ReturnType<typeof rootReducer>
