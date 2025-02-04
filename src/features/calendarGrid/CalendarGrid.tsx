@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { dateStrYMD, showMonthShort } from "../../utils/utils"
+import { dateStrYMD, dateTodayYMD, showMonthShort } from "../../utils/utils"
+import className from "classnames"
 import styles from "./CalendarGrid.module.css"
 import { useGetPublicHolidayApiSliceQuery } from "./publicHolidayApiSlice"
 
@@ -12,12 +13,39 @@ interface CalendarGridProps {
 
 interface ITask {
   task: string
-  taskData: string
+  taskDate: string
+}
+
+const mockTasks: { [key: string]: ITask[] } = {
+  "2025-02-05": [
+    { task: "Clean a car", taskDate: "2025-02-05" },
+    { task: "Buy some carrot", taskDate: "2025-02-05" },
+  ],
+  "2025-02-03": [
+    { task: "Go shopping", taskDate: "2025-02-03" },
+    { task: "Play tennis", taskDate: "2025-02-03" },
+  ],
+  "2025-02-27": [
+    { task: "Go swimming", taskDate: "2025-02-03" },
+    { task: "Repair a boat", taskDate: "2025-02-03" },
+    { task: "Buy some ice", taskDate: "2025-02-03" },
+  ],
+  "2025-03-03": [
+    { task: "Buy some milk", taskDate: "2025-02-03" },
+    { task: "Go running", taskDate: "2025-02-03" },
+    { task: "Repair a car", taskDate: "2025-02-03" },
+  ],
 }
 
 const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month }) => {
-  const [tasks, setTasks] = useState<{ [key: string]: ITask[] }>({})
-  console.log(tasks)
+  const [tasks, setTasks] = useState<{ [key: string]: ITask[] }>(mockTasks)
+  const [draggedTask, setDraggedTask] = useState<{
+    draggedTaskDate: string
+    task: ITask
+  } | null>(null)
+
+  const isToday = (day: number): boolean =>
+    dateTodayYMD() === dateStrYMD(year, month, day)
 
   const { data, isError, isLoading, isSuccess } =
     useGetPublicHolidayApiSliceQuery({
@@ -56,18 +84,35 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month }) => {
 
   const addTask = (day: number) => {
     const task = prompt("Введите задачу:")
-    const taskData = dateStrYMD(year, month, day)
+    const taskDate = dateStrYMD(year, month, day)
 
-    if (task && taskData) {
+    if (task && taskDate) {
       setTasks(prev => ({
         ...prev,
-        [taskData]: [...(prev[taskData] || []), { task, taskData }],
+        [taskDate]: [...(prev[taskDate] || []), { task, taskDate }],
       }))
     }
   }
 
+  const handleDragStart = (date: string, task: ITask) => {
+    setDraggedTask({ draggedTaskDate: date, task })
+  }
+
+  const handleDrop = (date: string) => {
+    if (draggedTask) {
+      setTasks(prev => {
+        const newTasks = { ...prev }
+        newTasks[draggedTask.draggedTaskDate] = newTasks[
+          draggedTask.draggedTaskDate
+        ].filter(t => t !== draggedTask.task)
+        newTasks[date] = [...(newTasks[date] || []), draggedTask.task]
+        return newTasks
+      })
+      setDraggedTask(null)
+    }
+  }
+
   if (isSuccess) {
-    console.log(data)
     const getHoliday = (day: number) => {
       const dateStr = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`
       return data.find(holiday => holiday.date === dateStr)?.localName || ""
@@ -78,7 +123,14 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month }) => {
         <div className={styles.calendarGrid}>
           {[...Array(firstDay).fill(null), ...Array(daysInMonth).keys()].map(
             (day, index) => (
-              <div key={index} className={styles.calendarCell}>
+              <div
+                key={index}
+                className={className(styles.calendarCell, {
+                  [styles.calendarCellToday]: isToday(day + 1),
+                })}
+                onDragOver={e => e.preventDefault()}
+                onDrop={() => handleDrop(dateStrYMD(year, month, day + 1))}
+              >
                 {day !== null && (
                   <>
                     <div className={styles.cellHeader}>
@@ -98,7 +150,17 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month }) => {
                     <ul className={styles.taskList}>
                       {(tasks[dateStrYMD(year, month, day + 1)] || []).map(
                         (task, i) => (
-                          <li key={i} className={styles.taskItem}>
+                          <li
+                            key={i}
+                            className={styles.taskItem}
+                            draggable
+                            onDragStart={() =>
+                              handleDragStart(
+                                dateStrYMD(year, month, day + 1),
+                                task,
+                              )
+                            }
+                          >
                             - {task.task}
                           </li>
                         ),
