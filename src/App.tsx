@@ -5,12 +5,14 @@ import NamesOfDays from "./features/namesOfDays/NamesOfDays"
 import CalendarGrid from "./features/calendarGrid/CalendarGrid"
 import { showMonthLong } from "./utils/utils"
 import MonthsButtons from "./features/monthsButtons/MonthsButtons"
+import TasksFilter from "./features/tasksFilter/TasksFilter"
 
 const App = () => {
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [year, setYear] = useState(new Date().getFullYear())
 
   const [showModal, setShowModal] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
 
   const handleMouseOver = () => {
     setShowModal(true)
@@ -67,13 +69,13 @@ const App = () => {
           <div className="calendarTitle">
             {showMonthLong(year, month - 1)} {year}
           </div>
-          <MonthsButtons
-            handlePlusMonth={handlePlusMonth}
-            handleMinesMonth={handleMinesMonth}
+          <TasksFilter
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
           />
         </div>
         <NamesOfDays />
-        <CalendarGrid year={year} month={month} />
+        <CalendarGrid year={year} month={month} searchQuery={searchQuery} />
       </section>
     </div>
   )

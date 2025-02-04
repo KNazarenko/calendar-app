@@ -6,11 +6,6 @@ import { useGetPublicHolidayApiSliceQuery } from "./publicHolidayApiSlice"
 
 const countryCode = "UA"
 
-interface CalendarGridProps {
-  year: number
-  month: number
-}
-
 interface ITask {
   task: string
   taskDate: string
@@ -37,13 +32,22 @@ const mockTasks: { [key: string]: ITask[] } = {
   ],
 }
 
-const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month }) => {
+interface CalendarGridProps {
+  year: number
+  month: number
+  searchQuery: string
+}
+
+const CalendarGrid: React.FC<CalendarGridProps> = ({
+  year,
+  month,
+  searchQuery,
+}) => {
   const [tasks, setTasks] = useState<{ [key: string]: ITask[] }>(mockTasks)
   const [draggedTask, setDraggedTask] = useState<{
     draggedTaskDate: string
     task: ITask
   } | null>(null)
-
   const isToday = (day: number): boolean =>
     dateTodayYMD() === dateStrYMD(year, month, day)
 
@@ -148,8 +152,13 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month }) => {
                       {getHoliday(day + 1)}
                     </span>
                     <ul className={styles.taskList}>
-                      {(tasks[dateStrYMD(year, month, day + 1)] || []).map(
-                        (task, i) => (
+                      {(tasks[dateStrYMD(year, month, day + 1)] || [])
+                        .filter(task =>
+                          task.task
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()),
+                        )
+                        .map((task, i) => (
                           <li
                             key={i}
                             className={styles.taskItem}
@@ -163,8 +172,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month }) => {
                           >
                             - {task.task}
                           </li>
-                        ),
-                      )}
+                        ))}
                     </ul>
                   </>
                 )}
